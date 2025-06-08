@@ -1,4 +1,4 @@
-# MuonRMS
+# Muon RMS-Norm
 This version of Muon converges slightly faster than the Muon from modded-nanogpt when training RWKV 7 (roughly 10% faster). 
 
 The change is RMS-Norm after orthogonalization over the **first** dimension of the weight matrix (**last dimension of nn.Linear**). The code here **assumes you store the weights like nn.Linear** i.e. used like `x = x @ W.T`. 
