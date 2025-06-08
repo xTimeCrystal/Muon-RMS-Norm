@@ -9,7 +9,7 @@ from typing import Dict, List, Optional, Tuple, Callable, Union
 
 torch.set_default_device('cuda')
 
-muon_cuda = load(name='muon_cuda', sources=['muon_cuda.cpp'], verbose=False)
+muon_cpp = load(name='muon_cpp', sources=['muon_cpp.cpp'], verbose=False)
 
 class Muon(optim.Optimizer):
     r"""MomentUm Orthogonalized by Newton-schulz optimizer.
@@ -24,8 +24,8 @@ class Muon(optim.Optimizer):
         backend: str = "newtonschulz5",
         backend_steps: int = 5,
     ):
-        if backend not in ["svd", "newtonschulz5"]:
-             raise ValueError(f"Unknown backend: {backend}. Choose 'svd' or 'newtonschulz5'.")
+        if backend not in ["newtonschulz5"]:
+             raise ValueError(f"Unknown backend: {backend}. Choose 'newtonschulz5'.")
              
         defaults = dict(lr=lr, momentum=momentum, weight_decay=weight_decay,
                        nesterov=nesterov, backend=backend,
@@ -74,7 +74,7 @@ class Muon(optim.Optimizer):
             if group['nesterov']:
                 torch._foreach_add_(grads, muon_bufs, alpha=group['momentum'])
 
-            grads = muon_cuda.process_gradients(
+            grads = muon_cpp.process_gradients(
                 grads, 
                 group['backend'], 
                 group['backend_steps'],
